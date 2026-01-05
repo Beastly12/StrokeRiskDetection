@@ -35,8 +35,6 @@ print("\nData types:")
 print(df.dtypes)
 
 
-# TEXT DATA STANDARDIZATION
-
 
 print("\n" + "=" * 70)
 print("STEP 1.5: TEXT DATA STANDARDIZATION")
@@ -86,7 +84,59 @@ for col in categorical_cols:
 
 print("\n✓ Text standardization complete")
 
-# DATA QUALITY ASSESSMENT
+# VISUALIZATION: Show what changed
+fig, axes = plt.subplots(2, 1, figsize=(12, 10))
+
+# Plot 1: Work Type
+ax1 = axes[0]
+work_before = df_original['work_type'].value_counts().sort_index()
+work_after = df['work_type'].value_counts().sort_index()
+
+x = np.arange(len(work_before))
+width = 0.35
+
+ax1.bar(x - width / 2, work_before.values, width, label='Before',
+        color='coral', edgecolor='black')
+ax1.bar(x + width / 2, work_after.values, width, label='After',
+        color='lightgreen', edgecolor='black')
+
+ax1.set_xlabel('Work Type')
+ax1.set_ylabel('Count')
+ax1.set_title('Work Type: Text Standardization\n("children" → "Children")',
+              fontweight='bold')
+ax1.set_xticks(x)
+ax1.set_xticklabels(work_after.index, rotation=45, ha='right')
+ax1.legend()
+ax1.grid(axis='y', alpha=0.3)
+
+# Plot 2: Smoking Status
+ax2 = axes[1]
+smoking_before = df_original['smoking_status'].value_counts().sort_index()
+smoking_after = df['smoking_status'].value_counts().sort_index()
+
+x2 = np.arange(len(smoking_after))
+
+ax2.bar(x2 - width / 2, smoking_before.values, width, label='Before',
+        color='coral', edgecolor='black')
+ax2.bar(x2 + width / 2, smoking_after.values, width, label='After',
+        color='lightgreen', edgecolor='black')
+
+ax2.set_xlabel('Smoking Status')
+ax2.set_ylabel('Count')
+ax2.set_title('Smoking Status: Text Standardization\n(lowercase → Title Case)',
+              fontweight='bold')
+ax2.set_xticks(x2)
+ax2.set_xticklabels(smoking_after.index, rotation=45, ha='right')
+ax2.legend()
+ax2.grid(axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('00_text_standardization.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\n📊 Saved: 00_text_standardization.png")
+
+
 
 print("\n" + "=" * 70)
 print("STEP 2: DATA QUALITY ASSESSMENT")
@@ -210,7 +260,7 @@ plt.savefig('02_outlier_analysis_boxplots.png', dpi=300, bbox_inches='tight')
 plt.show()
 print("\n📊 Saved: 02_outlier_analysis_boxplots.png")
 
-# DATA CLEANING
+
 
 print("\n" + "=" * 70)
 print("STEP 3: DATA CLEANING")
@@ -374,7 +424,7 @@ print("  Decision: KEEP (medically valid - obesity range documented up to 100+)"
 
 print("\n✓ All outliers retained as clinically valid extreme values")
 
-# CLEANING SUMMARY
+
 
 print("\n" + "=" * 70)
 print("STEP 4: DATA CLEANING SUMMARY")
